@@ -15,25 +15,13 @@ import android.view.ViewGroup;
  * Email:sunming@radacat.com
  */
 
-public abstract class BaseFragment extends Fragment{
+public abstract class BaseFragment extends Fragment {
     //Fragment的View加载完毕的标记
     private boolean isViewCreated;
     //Fragment对用户可见的标记
     private boolean isUIVisible;
 
     protected BaseActivity mActivity;
-
-    //获取布局文件ID
-    protected abstract int getLayoutId();
-
-    //获取宿主Activity
-    protected BaseActivity getHoldingActivity() {
-        return mActivity;
-    }
-
-    protected abstract void initView(View view, Bundle savedInstanceState);
-
-    protected abstract void loadData();
 
     @Override
     public void onAttach(Activity activity) {
@@ -47,12 +35,33 @@ public abstract class BaseFragment extends Fragment{
         initView(view, savedInstanceState);
         return view;
     }
+
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         isViewCreated = true;
-        lazyLoad();
+        setUserVisibleHint(true);
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        //页面销毁,恢复标记
+        isViewCreated = false;
+        isUIVisible = false;
+    }
+
+    //获取布局文件ID
+    protected abstract int getLayoutId();
+
+    //获取宿主Activity
+    protected BaseActivity getHoldingActivity() {
+        return mActivity;
+    }
+
+    protected abstract void initView(View view, Bundle savedInstanceState);
+
+    protected abstract void loadData();
 
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
@@ -76,11 +85,4 @@ public abstract class BaseFragment extends Fragment{
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        //页面销毁,恢复标记
-        isViewCreated = false;
-        isUIVisible = false;
-    }
 }

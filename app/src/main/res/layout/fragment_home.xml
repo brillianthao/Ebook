@@ -1,19 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/orange"
+    >
 
-    <include
-        android:id="@+id/home_top"
-        layout="@layout/app_topbar"/>
 
-    <TextView
-        android:id="@+id/tv_home"
+    <LinearLayout
+        android:id="@+id/content_ll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Home"
-        android:textColor="@color/black"
-        android:textSize="20sp"/>
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/home_top"
+            layout="@layout/app_topbar"/>
+
+        <com.ming.ebook.view.HorizontalListView
+            android:id="@+id/horizontal_list_view"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="120dp">
+
+        </com.ming.ebook.view.HorizontalListView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grid_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+</ScrollView>

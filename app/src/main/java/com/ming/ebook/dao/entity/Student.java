@@ -1,8 +1,9 @@
-package com.ming.ebook.entity;
+package com.ming.ebook.dao.entity;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Keep;
+import org.greenrobot.greendao.annotation.Generated;
 
 /**
  * 创建人: sunming

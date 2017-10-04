@@ -30,7 +30,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     protected int getContentViewId() {
-        immersiveStatusBar(R.color.blue);
+        immersiveStatusBar(R.color.orange);
         return R.layout.activity_main;
     }
 
@@ -40,6 +40,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             PrintLog.d("阻止fragment重复加载");
             savedInstanceState.putParcelable("android:support:fragments", null);
         }
+        fm = getSupportFragmentManager();
+
         BottomNavigationBar bottomNavigationBar = (BottomNavigationBar) findViewById(R.id.bottom_navigation_bar);
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_FIXED);
         bottomNavigationBar
@@ -65,9 +67,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
      * 设置默认的
      */
     private void setDefaultFragment() {
-        fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(R.id.layFrame, HomeFragment.newInstance("Home"));
+        transaction.add(R.id.layFrame, HomeFragment.newInstance("Home"));
         transaction.commit();
     }
 
@@ -83,11 +84,30 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     public void onTabSelected(int position) {
         if (fragments != null) {
             if (position < fragments.size()) {
-                fm = getSupportFragmentManager();
+                switch (position) {
+                    case 0:
+                        immersiveStatusBar(R.color.orange);
+                        break;
+                    case 1:
+                        immersiveStatusBar(R.color.blue);
+                        break;
+                    case 2:
+                        immersiveStatusBar(R.color.teal);
+                        break;
+                    default:
+                        break;
+                }
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment fragment = fragments.get(position);
-                ft.replace(R.id.layFrame, fragment);
-                ft.commitAllowingStateLoss();
+                if (fragment.isAdded()) {
+                    ft.show(fragment);
+                    ft.commitAllowingStateLoss();
+                } else {
+                    ft.add(R.id.layFrame, fragment);
+                    ft.show(fragment);
+                    ft.commitAllowingStateLoss();
+
+                }
             }
         }
     }
@@ -96,11 +116,12 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     public void onTabUnselected(int position) {
         if (fragments != null) {
             if (position < fragments.size()) {
-                fm = getSupportFragmentManager();
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment fragment = fragments.get(position);
-                ft.remove(fragment);
-                ft.commitAllowingStateLoss();
+                if (fragment.isAdded()) {
+                    ft.hide(fragment);
+                    ft.commitAllowingStateLoss();
+                }
             }
         }
     }

@@ -8,4 +8,17 @@ package com.ming.ebook.ehome;
  */
 
 public interface IeHomeM {
+    /**
+     * 通过url获取数据
+     *
+     * @param url url
+     */
+    void getBannerDataByUrl(String url);
+
+    /**
+     * 通过Cache获取数据
+     *
+     * @param bannerKey ACache的key
+     */
+    void getBannerDataByCache(String bannerKey);
 }

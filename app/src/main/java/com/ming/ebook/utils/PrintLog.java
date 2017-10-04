@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class PrintLog {
     // 自定义Tag的前缀，可以是作者名
-    private static String customTagPrefix = "Book";
+    private static String customTagPrefix = "Ebook";
     // 容许打印日志的类型，默认是true，设置为false则不打印
     private static boolean allowD = true;
 

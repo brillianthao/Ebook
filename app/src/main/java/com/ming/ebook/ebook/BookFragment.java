@@ -24,6 +24,7 @@ public class BookFragment extends BaseFragment {
         fragment.setArguments(args);
         return fragment;
     }
+
     @Override
     protected int getLayoutId() {
         return R.layout.fragment_book;
@@ -31,8 +32,10 @@ public class BookFragment extends BaseFragment {
 
     @Override
     protected void initView(View view, Bundle savedInstanceState) {
-        LinearLayout topBar= (LinearLayout) view.findViewById(R.id.book_top);
-        TextView title= (TextView) topBar.findViewById(R.id.top_title);
+        LinearLayout topBar = (LinearLayout) view.findViewById(R.id.book_top);
+        LinearLayout topSearchLL = (LinearLayout) topBar.findViewById(R.id.top_search_ll);
+        topSearchLL.setVisibility(View.INVISIBLE);
+        TextView title = (TextView) topBar.findViewById(R.id.top_title);
         title.setText("Book");
     }
 

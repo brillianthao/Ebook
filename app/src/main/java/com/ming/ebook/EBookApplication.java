@@ -1,6 +1,10 @@
 package com.ming.ebook;
 
 import android.app.Application;
+import android.content.Context;
+import android.support.multidex.MultiDex;
+
+import com.ming.ebook.utils.Model;
 
 /**
  * 创建人: sunming
@@ -13,6 +17,15 @@ public class EBookApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        //分包
+        MultiDex.install(this);
+        //初始化数据模型层类
+        Model.getInstance().init(this);
     }
 }
 //1.凡是和UI相关的，都不建议使用Application的Context.
