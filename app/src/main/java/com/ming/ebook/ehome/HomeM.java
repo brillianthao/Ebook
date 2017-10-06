@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.ming.ebook.bean.BannerBean;
+import com.ming.ebook.bean.Categories;
 import com.ming.ebook.utils.Model;
 import com.ming.ebook.utils.PrintLog;
 
@@ -58,13 +59,13 @@ public class HomeM implements IeHomeM {
                             Gson gson = new Gson();
                             BannerBean bean = gson.fromJson(json, BannerBean.class);
                             List<BannerBean.DataBean.RankingBean.BooksBean> books = bean.getData().getRanking().getBooks();
-                            if (books.size()>=4){
-                                ArrayList<BannerBean.DataBean.RankingBean.BooksBean> fourList=new ArrayList<BannerBean.DataBean.RankingBean.BooksBean>();
+                            if (books.size() >= 4) {
+                                ArrayList<BannerBean.DataBean.RankingBean.BooksBean> fourList = new ArrayList<>();
                                 for (int i = 0; i < 4; i++) {
                                     fourList.add(books.get(i));
                                 }
                                 mIeHomeP.bannerDataBackP(fourList);
-                            }else {
+                            } else {
                                 mIeHomeP.bannerDataBackP(books);
                             }
                         }
@@ -77,5 +78,46 @@ public class HomeM implements IeHomeM {
     @Override
     public void getBannerDataByCache(String bannerKey) {
 
+    }
+
+    @Override
+    public void getCategoriesCountData(final String url) {
+        PrintLog.d("getCategoriesCountData");
+        //网络访问
+        Model.getInstance().getGloablThreadPool().execute(new Runnable() {
+
+            @Override
+            public void run() {
+                OkHttpClient okHttpClient = new OkHttpClient();
+                okhttp3.Request request = new okhttp3.Request.Builder()
+                        .url(url)
+                        .build();
+                Call call = okHttpClient.newCall(request);
+                call.enqueue(new Callback() {
+                    @Override
+                    public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                        PrintLog.d("getCategoriesCountData网络访问失败");
+                    }
+
+                    @Override
+                    public void onResponse(@NonNull Call call, @NonNull okhttp3.Response response) throws IOException {
+                        int resCode = response.code();
+                        if (resCode == 200) {
+                            //解析json
+                            String json = response.body().string();
+                            PrintLog.d("getCategoriesCountData json:" + json);
+                            Gson gson = new Gson();
+                            Categories categoriesBean = gson.fromJson(json, Categories.class);
+
+                            List<Categories.DataBean.MaleBean> maleBeanList = categoriesBean.getData().getMale();
+                            mIeHomeP.categoriesMaleBeanBackP(maleBeanList);
+
+                            List<Categories.DataBean.FemaleBean> femaleBeanList = categoriesBean.getData().getFemale();
+                            mIeHomeP.categoriesFemaleBeanBackP(femaleBeanList);
+                        }
+                    }
+                });
+            }
+        });
     }
 }

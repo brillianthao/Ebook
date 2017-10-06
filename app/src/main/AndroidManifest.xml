@@ -21,6 +21,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:launchMode="singleTask"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:name=".MainActivity">
         </activity>

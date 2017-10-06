@@ -21,4 +21,9 @@ public interface IeHomeM {
      * @param bannerKey ACache的key
      */
     void getBannerDataByCache(String bannerKey);
+
+    /**
+     * 获取分类带数量的数据
+     */
+    void getCategoriesCountData(String url);
 }

@@ -1,6 +1,9 @@
 package com.ming.ebook.ehome;
 
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -9,12 +12,17 @@ import android.widget.Toast;
 import com.ming.ebook.R;
 import com.ming.ebook.base.BaseFragment;
 import com.ming.ebook.bean.BannerBean;
+import com.ming.ebook.bean.Categories;
 import com.ming.ebook.ehome.adapter.BannerAdapter;
+import com.ming.ebook.ehome.adapter.CategoriesFemaleAdapter;
+import com.ming.ebook.ehome.adapter.CategoriesMaleAdapter;
 import com.ming.ebook.utils.PrintLog;
 import com.ming.ebook.view.HorizontalListView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import decoration.DividerGridItemDecoration;
 
 
 /**
@@ -27,9 +35,15 @@ import java.util.List;
 public class HomeFragment extends BaseFragment implements IeHomeV {
     //UI
     private HorizontalListView bannerListView;
+    private RecyclerView categoriesMaleRecyclerView;
+    private RecyclerView categoriesFemaleRecyclerView;
     //data
     private List<BannerBean.DataBean.RankingBean.BooksBean> mBannerBeanList;
     private BannerAdapter mBannerAdapter;
+    private List<Categories.DataBean.MaleBean> mMaleBeanList;
+    private CategoriesMaleAdapter mMaleCategorieAdapter;
+    private List<Categories.DataBean.FemaleBean> mFemaleBeanList;
+    private CategoriesFemaleAdapter mFemaleCategorieAdapter;
     //class
     private HomeP mHomeP;
 
@@ -66,10 +80,30 @@ public class HomeFragment extends BaseFragment implements IeHomeV {
 
         //UI
         bannerListView = (HorizontalListView) view.findViewById(R.id.horizontal_list_view);
+        categoriesMaleRecyclerView = (RecyclerView) view.findViewById(R.id.male_recycler_view);
+        categoriesMaleRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, 3));
+        categoriesMaleRecyclerView.setHasFixedSize(true);
+        categoriesMaleRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        categoriesMaleRecyclerView.addItemDecoration(new DividerGridItemDecoration(mActivity));
+
+        categoriesFemaleRecyclerView = (RecyclerView) view.findViewById(R.id.female_recycler_view);
+        categoriesFemaleRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, 3));
+        categoriesFemaleRecyclerView.setHasFixedSize(true);
+        categoriesFemaleRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        categoriesFemaleRecyclerView.addItemDecoration(new DividerGridItemDecoration(mActivity));
         //data
         mBannerBeanList = new ArrayList<>();
         mBannerAdapter = new BannerAdapter(mBannerBeanList, mActivity);
         bannerListView.setAdapter(mBannerAdapter);
+
+        mMaleBeanList = new ArrayList<>();
+        mMaleCategorieAdapter = new CategoriesMaleAdapter(mMaleBeanList, mActivity);
+        categoriesMaleRecyclerView.setAdapter(mMaleCategorieAdapter);
+
+        mFemaleBeanList = new ArrayList<>();
+        mFemaleCategorieAdapter = new CategoriesFemaleAdapter(mFemaleBeanList, mActivity);
+        categoriesFemaleRecyclerView.setAdapter(mFemaleCategorieAdapter);
+
         //类
         mHomeP = new HomeP(this);
         PrintLog.d("banner initView");
@@ -80,6 +114,8 @@ public class HomeFragment extends BaseFragment implements IeHomeV {
         PrintLog.d("banner loadData()");
         //1.获取banner数据
         mHomeP.getBannerData();
+        //2获取分类数据
+        mHomeP.getCategoriesCountData();
     }
     //普通发法-----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -108,5 +144,39 @@ public class HomeFragment extends BaseFragment implements IeHomeV {
     @Override
     public void showBannerDataToViewError() {
         Toast.makeText(mActivity, "showBannerDataToViewError", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showCategoriesMaleBeanData(final List<Categories.DataBean.MaleBean> maleList) {
+        PrintLog.d("showCategoriesMaleBeanData");
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mMaleBeanList.clear();
+                mMaleCategorieAdapter.notifyDataSetChanged();
+                mMaleBeanList.addAll(maleList);
+                mMaleCategorieAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void showCategoriesFemaleBeanData(final List<Categories.DataBean.FemaleBean> femaleList) {
+        PrintLog.d("showCategoriesFemaleBeanData");
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mFemaleBeanList.clear();
+                mFemaleCategorieAdapter.notifyDataSetChanged();
+                mFemaleBeanList.addAll(femaleList);
+                mFemaleCategorieAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+
+    @Override
+    public void showCategoriesCountDataError() {
+        Toast.makeText(mActivity, "showCategoriesCountDataError", Toast.LENGTH_SHORT).show();
     }
 }

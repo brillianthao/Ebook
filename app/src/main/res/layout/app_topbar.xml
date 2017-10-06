@@ -3,7 +3,7 @@
               android:id="@+id/top_bar_ll"
               android:layout_width="match_parent"
               android:layout_height="48dp"
-              android:background="@color/transparent"
+              android:background="@color/blue"
               android:orientation="horizontal">
 
     <LinearLayout

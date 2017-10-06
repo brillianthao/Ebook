@@ -1,6 +1,7 @@
 package com.ming.ebook.ehome;
 
 import com.ming.ebook.bean.BannerBean;
+import com.ming.ebook.bean.Categories;
 import com.ming.ebook.constant.EBookUri;
 import com.ming.ebook.utils.PrintLog;
 
@@ -31,8 +32,34 @@ public class HomeP implements IeHomeP {
     @Override
     public void bannerDataBackP(List<BannerBean.DataBean.RankingBean.BooksBean> books) {
         PrintLog.d("banner getBannerData:" + books.toString());
-        if (books != null && books.size() > 0) {
+        if (books.size() > 0) {
             mHomeV.showBannerDataToView(books);
+        } else {
+            mHomeV.showBannerDataToViewError();
+        }
+    }
+
+    @Override
+    public void getCategoriesCountData() {
+        PrintLog.d("getCategoriesCountData");
+        mHomeM.getCategoriesCountData(EBookUri.CATEGORIES_WITH_COUNT);
+    }
+
+    @Override
+    public void categoriesMaleBeanBackP(List<Categories.DataBean.MaleBean> maleBeanList) {
+        PrintLog.d("categoriesMaleBeanBackP:" + maleBeanList.toString());
+        if (maleBeanList.size() > 0) {
+            mHomeV.showCategoriesMaleBeanData(maleBeanList);
+        } else {
+            mHomeV.showBannerDataToViewError();
+        }
+    }
+
+    @Override
+    public void categoriesFemaleBeanBackP(List<Categories.DataBean.FemaleBean> femaleBeanList) {
+        PrintLog.d("categoriesFemaleBeanBackP:" + femaleBeanList.toString());
+        if (femaleBeanList.size() > 0) {
+            mHomeV.showCategoriesFemaleBeanData(femaleBeanList);
         } else {
             mHomeV.showBannerDataToViewError();
         }

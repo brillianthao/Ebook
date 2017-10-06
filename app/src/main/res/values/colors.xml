@@ -13,4 +13,7 @@
     <color name="blue">#2196F3</color>
     <color name="grey">#cdcdcd</color>
     <color name="orange">#F57C00</color>
+
+
+    <color name="fragment_bg">#e6e6e6</color>
 </resources>

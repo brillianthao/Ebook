@@ -1,6 +1,5 @@
 package com.ming.ebook;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +7,6 @@ import android.support.v4.app.FragmentTransaction;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.ashokvarma.bottomnavigation.TextBadgeItem;
 import com.ming.ebook.base.BaseActivity;
 import com.ming.ebook.base.BaseFragment;
 import com.ming.ebook.ebook.BookFragment;
@@ -30,7 +28,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     protected int getContentViewId() {
-        immersiveStatusBar(R.color.orange);
+        immersiveStatusBar(R.color.blue);
         return R.layout.activity_main;
     }
 
@@ -47,14 +45,15 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         bottomNavigationBar
                 .setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC
                 );
-        TextBadgeItem numberBadgeItem = new TextBadgeItem()
-                .setBorderWidth(4)
-                .setBackgroundColor(Color.RED)
-                .setText("5")
-                .setHideOnSelect(true);
-        bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_home_white_24dp, "Home").setActiveColorResource(R.color.orange).setBadgeItem(numberBadgeItem))
+//        TextBadgeItem numberBadgeItem = new TextBadgeItem()
+//                .setBorderWidth(4)
+//                .setBackgroundColor(Color.RED)
+//                .setText("5")
+//                .setHideOnSelect(true);
+//        bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_home_white_24dp, "Home").setActiveColorResource(R.color.blue).setBadgeItem(numberBadgeItem))
+        bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_home_white_24dp, "Home").setActiveColorResource(R.color.blue))
                 .addItem(new BottomNavigationItem(R.drawable.ic_book_white_24dp, "Book").setActiveColorResource(R.color.blue))
-                .addItem(new BottomNavigationItem(R.drawable.ic_favorite_white_24dp, "Mine").setActiveColorResource(R.color.teal))
+                .addItem(new BottomNavigationItem(R.drawable.ic_favorite_white_24dp, "Mine").setActiveColorResource(R.color.blue))
                 .setFirstSelectedPosition(0)
                 .initialise();
 
@@ -84,19 +83,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     public void onTabSelected(int position) {
         if (fragments != null) {
             if (position < fragments.size()) {
-                switch (position) {
-                    case 0:
-                        immersiveStatusBar(R.color.orange);
-                        break;
-                    case 1:
-                        immersiveStatusBar(R.color.blue);
-                        break;
-                    case 2:
-                        immersiveStatusBar(R.color.teal);
-                        break;
-                    default:
-                        break;
-                }
                 FragmentTransaction ft = fm.beginTransaction();
                 Fragment fragment = fragments.get(position);
                 if (fragment.isAdded()) {

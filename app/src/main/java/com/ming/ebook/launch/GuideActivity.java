@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.ming.ebook.MainActivity;
 import com.ming.ebook.R;
 import com.ming.ebook.base.BaseActivity;
+import com.ming.ebook.view.AccordionTransformer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +39,7 @@ public class GuideActivity extends BaseActivity {
         listImg.add(findViewById(R.id.y3));
         adapter=new GuideViewAdapter();
         viewPager.setAdapter(adapter);
+        viewPager.setPageTransformer(true,new AccordionTransformer());
         viewPager.addOnPageChangeListener(showPageChange);
         enterBt.setOnClickListener(new View.OnClickListener() {
             @Override
