@@ -7,8 +7,10 @@ package com.ming.ebook.constant;
  * Email:sunming@radacat.com
  */
 
-public class AppConstans {
+public class AppConstants {
 
-    public static final String FIRST_CACHE ="firstCache";
+    public static final String FIRST_CACHE = "firstCache";
+
+    public static final int DETAIL_DATA_HANDLER = 0;
 
 }

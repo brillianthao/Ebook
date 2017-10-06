@@ -12,6 +12,7 @@
         android:layout_height="48dp"
         android:gravity="center"
         android:orientation="vertical"
+        android:visibility="visible"
         >
 
         <ImageView
@@ -58,6 +59,7 @@
         android:layout_height="48dp"
         android:gravity="center"
         android:orientation="vertical"
+        android:visibility="visible"
         >
 
         <ImageView

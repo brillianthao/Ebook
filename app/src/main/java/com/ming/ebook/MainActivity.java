@@ -51,9 +51,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 //                .setText("5")
 //                .setHideOnSelect(true);
 //        bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_home_white_24dp, "Home").setActiveColorResource(R.color.blue).setBadgeItem(numberBadgeItem))
-        bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_home_white_24dp, "Home").setActiveColorResource(R.color.blue))
-                .addItem(new BottomNavigationItem(R.drawable.ic_book_white_24dp, "Book").setActiveColorResource(R.color.blue))
-                .addItem(new BottomNavigationItem(R.drawable.ic_favorite_white_24dp, "Mine").setActiveColorResource(R.color.blue))
+        bottomNavigationBar.addItem(new BottomNavigationItem(R.drawable.ic_home_white_24dp, getString(R.string.fragment_home)).setActiveColorResource(R.color.blue))
+                .addItem(new BottomNavigationItem(R.drawable.ic_book_white_24dp, getString(R.string.fragment_book)).setActiveColorResource(R.color.blue))
+                .addItem(new BottomNavigationItem(R.drawable.ic_favorite_white_24dp, getString(R.string.fragment_mine)).setActiveColorResource(R.color.blue))
                 .setFirstSelectedPosition(0)
                 .initialise();
 

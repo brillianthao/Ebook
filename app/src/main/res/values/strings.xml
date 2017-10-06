@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Ebook</string>
+    <string name="fragment_home">书城</string>
+    <string name="fragment_book">书架</string>
+    <string name="fragment_mine">我的</string>
     <string name="item_counts">%1$d 本</string>
+    <string name="item_followers">%1$d 人气</string>
 </resources>

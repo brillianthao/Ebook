@@ -46,7 +46,7 @@ public class Categories implements Serializable{
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * male : [{"name":"玄幻","bookCount":481179,"monthlyCount":13467,"icon":"/icon/玄幻_.png"},{"name":"奇幻","bookCount":43973,"monthlyCount":1393,"icon":"/icon/奇幻_.png"},{"name":"武侠","bookCount":39449,"monthlyCount":961,"icon":"/icon/武侠_.png"},{"name":"仙侠","bookCount":127023,"monthlyCount":5340,"icon":"/icon/仙侠_.png"},{"name":"都市","bookCount":346645,"monthlyCount":9063,"icon":"/icon/都市_.png"},{"name":"职场","bookCount":16103,"monthlyCount":665,"icon":"/icon/职场_.png"},{"name":"历史","bookCount":69034,"monthlyCount":2201,"icon":"/icon/历史_.png"},{"name":"军事","bookCount":14614,"monthlyCount":1094,"icon":"/icon/军事_.png"},{"name":"游戏","bookCount":79172,"monthlyCount":1904,"icon":"/icon/游戏_.png"},{"name":"竞技","bookCount":5551,"monthlyCount":243,"icon":"/icon/竞技_.png"},{"name":"科幻","bookCount":112636,"monthlyCount":1655,"icon":"/icon/科幻_.png"},{"name":"灵异","bookCount":32284,"monthlyCount":2495,"icon":"/icon/灵异_.png"},{"name":"同人","bookCount":36409,"monthlyCount":323,"icon":"/icon/同人_.png"},{"name":"轻小说","bookCount":4412,"monthlyCount":208,"icon":"/icon/轻小说_.png"}]
          * female : [{"name":"古代言情","bookCount":444379,"monthlyCount":9367,"icon":"/icon/古代言情_.png"},{"name":"现代言情","bookCount":561209,"monthlyCount":14301,"icon":"/icon/现代言情_.png"},{"name":"青春校园","bookCount":106020,"monthlyCount":2513,"icon":"/icon/青春校园_.png"},{"name":"纯爱","bookCount":130282,"monthlyCount":1048,"icon":"/icon/耽美_.png"},{"name":"玄幻奇幻","bookCount":129136,"monthlyCount":423,"icon":"/icon/玄幻奇幻_.png"},{"name":"武侠仙侠","bookCount":62908,"monthlyCount":1308,"icon":"/icon/武侠仙侠_.png"},{"name":"科幻","bookCount":9233,"monthlyCount":245,"icon":"/icon/科幻_.png"},{"name":"游戏竞技","bookCount":6275,"monthlyCount":138,"icon":"/icon/游戏竞技_.png"},{"name":"悬疑灵异","bookCount":14346,"monthlyCount":486,"icon":"/icon/悬疑灵异_.png"},{"name":"同人","bookCount":122541,"monthlyCount":146,"icon":"/icon/同人_.png"},{"name":"女尊","bookCount":20712,"monthlyCount":878,"icon":"/icon/女尊_.png"},{"name":"莉莉","bookCount":25478,"monthlyCount":34,"icon":"/icon/百合_.png"}]
@@ -101,7 +101,7 @@ public class Categories implements Serializable{
             this.press = press;
         }
 
-        public static class MaleBean {
+        public static class MaleBean implements Serializable{
             /**
              * name : 玄幻
              * bookCount : 481179
@@ -157,7 +157,7 @@ public class Categories implements Serializable{
             }
         }
 
-        public static class FemaleBean {
+        public static class FemaleBean implements Serializable{
             /**
              * name : 古代言情
              * bookCount : 444379

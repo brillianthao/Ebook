@@ -13,17 +13,21 @@ public class EBookUri {
     public static final String BASE_URL ="http://novel.juhe.im/";
     //获取带书籍数量的父分类
     public static final String CATEGORIES_WITH_COUNT =BASE_URL+"categories";
-    //获取带子分类的分类
-    public static final String SUB_CATEGORIES =BASE_URL+"sub-categories";
 
     /**
      * 获取分类详情
      * query:
-     {
+     {type: hot, new, reputation, over
      gender, type, major(主分类), minor(子分类), start, limit
      }
      */
-    public static final String CATEGORY_INFO =BASE_URL+"category-info?gender="+"male"+"&type="+"hot"+"&major="+"奇幻"+"&minor="+"西方玄幻"+"&start="+"0"+"&limit="+"20";
+    public static final String CATEGORY_HEAD=BASE_URL+"category-info?";
+    public static final String CATEGORY_GENDER="gender=";
+    public static final String CATEGORY_TYPE="&type=";
+    public static final String CATEGORY_MAJOR="&major=";
+    public static final String CATEGORY_START="&minor=&start=";
+    public static final String CATEGORY_LIMIT="&limit=";
+
     /**
      * 获取书籍详情
 

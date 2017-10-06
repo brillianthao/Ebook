@@ -7,7 +7,7 @@ import android.os.Handler;
 import com.ming.ebook.MainActivity;
 import com.ming.ebook.R;
 import com.ming.ebook.base.BaseActivity;
-import com.ming.ebook.constant.AppConstans;
+import com.ming.ebook.constant.AppConstants;
 import com.ming.ebook.cache.ACache;
 
 
@@ -26,9 +26,9 @@ public class LaunchActivity extends BaseActivity {
             public void run() {
                 //在主线程中执行
                 //首先判断用户是否是第一次启动App
-                ACache appCache = ACache.get(LaunchActivity.this, AppConstans.FIRST_CACHE);
-                if (appCache.getAsString(AppConstans.FIRST_CACHE)==null){
-                    appCache.put(AppConstans.FIRST_CACHE,AppConstans.FIRST_CACHE);
+                ACache appCache = ACache.get(LaunchActivity.this, AppConstants.FIRST_CACHE);
+                if (appCache.getAsString(AppConstants.FIRST_CACHE)==null){
+                    appCache.put(AppConstants.FIRST_CACHE, AppConstants.FIRST_CACHE);
                     startActivity(GuideActivity.class);
 
                 }else {

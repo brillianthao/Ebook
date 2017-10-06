@@ -1,6 +1,7 @@
 package com.ming.ebook.ehome.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.ming.ebook.R;
 import com.ming.ebook.bean.Categories;
+import com.ming.ebook.ehome.activity.CategoriesDetailsActivity;
 
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class CategoriesFemaleAdapter extends RecyclerView.Adapter<CategoriesFema
         return mDataList.size();
     }
 
-    static class ItemCategoriesViewHolder extends RecyclerView.ViewHolder {
+    class ItemCategoriesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView itemName;
         TextView itemCount;
 
@@ -59,6 +61,17 @@ public class CategoriesFemaleAdapter extends RecyclerView.Adapter<CategoriesFema
             super(itemView);
             itemName = (TextView) itemView.findViewById(R.id.item_name);
             itemCount = (TextView) itemView.findViewById(R.id.item_count);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            //跳转
+            Intent intent = new Intent(mContext, CategoriesDetailsActivity.class);
+            Categories.DataBean.FemaleBean bean = mDataList.get(getAdapterPosition());
+            intent.putExtra("details_key", "FemaleBean");
+            intent.putExtra("details_data", bean);
+            mContext.startActivity(intent);
         }
     }
 }

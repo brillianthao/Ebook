@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--banner-->
     <item name="image_tag" type="id"/>
+    <!--分类详情-->
+    <item name="image_detail_tag" type="id"/>
 </resources>
