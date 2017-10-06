@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    android:id="@+id/cardView"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    app:cardBackgroundColor="@color/grey"
+                                    app:cardCornerRadius="10dp"
+                                    app:cardPreventCornerOverlap="true"
+                                    app:cardUseCompatPadding="true">
+    <!--cardUseCompatPadding 设置阴影之后自动缩小布局大小-->
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/pop_book_cover"
+            android:layout_width="50dp"
+            android:layout_height="70dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="centerCrop"
+            android:src="@color/blue"/>
+
+        <TextView
+            android:id="@+id/pop_book_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/pop_book_cover"
+            android:layout_toEndOf="@+id/pop_book_cover"
+            android:text="TextView"
+            android:textSize="12sp"/>
+
+
+        <TextView
+            android:id="@+id/pop_book_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pop_book_title"
+            android:layout_toEndOf="@+id/pop_book_cover"
+            android:text="TextView"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/pop_book_shortIntro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pop_book_author"
+            android:layout_toEndOf="@+id/pop_book_cover"
+            android:singleLine="true"
+            android:text="TextView"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/pop_book_follower"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/pop_book_cover"
+            android:layout_toEndOf="@+id/pop_book_cover"
+            android:text="TextView"
+            android:textSize="12sp"/>
+
+        <View
+            android:id="@+id/gray_line"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/pop_book_cover"
+            android:background="@color/grey"/>
+
+        <LinearLayout
+            android:id="@+id/bottom_ll"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gray_line"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/pop_book_add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:text="加入书架"
+                />
+
+            <Button
+                android:id="@+id/pop_book_read"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/blue"
+                android:text="开始阅读"
+                />
+        </LinearLayout>
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

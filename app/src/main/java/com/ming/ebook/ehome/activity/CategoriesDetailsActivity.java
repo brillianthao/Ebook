@@ -1,6 +1,7 @@
 package com.ming.ebook.ehome.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,11 +9,19 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.ming.ebook.R;
 import com.ming.ebook.base.BaseActivity;
@@ -20,24 +29,26 @@ import com.ming.ebook.bean.Categories;
 import com.ming.ebook.bean.CategoriesDetails;
 import com.ming.ebook.constant.AppConstants;
 import com.ming.ebook.constant.EBookUri;
+import com.ming.ebook.decoration.DividerItemDecoration;
 import com.ming.ebook.ehome.adapter.CategoriesDetailsAdapter;
+import com.ming.ebook.system.ScreenUtils;
 import com.ming.ebook.utils.Model;
 import com.ming.ebook.utils.PrintLog;
+import com.ming.ebook.utils.RegularUtils;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-import decoration.DividerItemDecoration;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 
-public class CategoriesDetailsActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener {
+public class CategoriesDetailsActivity extends BaseActivity implements RadioGroup.OnCheckedChangeListener, CategoriesDetailsAdapter.OnItemClickListener {
     private RadioGroup categoriesDetailsRg;
     private RecyclerView detailsRecyclerView;
-
+    private PopupWindow bookInfoPop;
 
     private String detailUrl;
     private String genderName;
@@ -165,7 +176,7 @@ public class CategoriesDetailsActivity extends BaseActivity implements RadioGrou
         mDetailsList = new ArrayList<>();
         mDetailsAdapter = new CategoriesDetailsAdapter(mDetailsList, this);
         detailsRecyclerView.setAdapter(mDetailsAdapter);
-
+        mDetailsAdapter.setOnItemClickListener(this);
         //网络获取数据
         getDetailsDataByUrl();
     }
@@ -244,4 +255,62 @@ public class CategoriesDetailsActivity extends BaseActivity implements RadioGrou
 
     }
 
+    @Override
+    public void onItemClick(View view, int position) {
+        //1.view
+        View popView = LayoutInflater.from(this).inflate(R.layout.item_book_info, null);
+        ImageView book_cover = (ImageView) popView.findViewById(R.id.pop_book_cover);
+        TextView book_title = (TextView) popView.findViewById(R.id.pop_book_title);
+        TextView book_author = (TextView) popView.findViewById(R.id.pop_book_author);
+        TextView book_shortIntro = (TextView) popView.findViewById(R.id.pop_book_shortIntro);
+        TextView book_follower = (TextView) popView.findViewById(R.id.pop_book_follower);
+        Button pop_add = (Button) popView.findViewById(R.id.pop_book_add);
+        Button pop_read = (Button) popView.findViewById(R.id.pop_book_read);
+        CategoriesDetails.DataBean.BooksBean booksBean = mDetailsList.get(position);
+        //加载图片
+        Glide.with(this)
+                .load(RegularUtils.regularImageUrl(booksBean.getCover()))
+                .placeholder(R.drawable.day)
+                .crossFade()
+                .into(book_cover);
+        book_title.setText(booksBean.getTitle());
+        book_author.setText(booksBean.getAuthor());
+        book_shortIntro.setText(booksBean.getShortIntro());
+        book_follower.setText(getString(R.string.item_followers, booksBean.getLatelyFollower()));
+        pop_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //操作数据库
+            }
+        });
+        pop_read.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //操作数据库
+//                Intent intent = new Intent();
+//                startActivity(intent);
+            }
+        });
+        //2.window
+        int popWidth = (int) (ScreenUtils.getRealScreenWidth(this) * 0.9);
+        int popHeight = (int) (ScreenUtils.getRealScreenHeight(this) * 0.3);
+        bookInfoPop = new PopupWindow(popView, popWidth
+                , popHeight, true);
+        bookInfoPop.setTouchable(true);
+        bookInfoPop.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.i("mPopupWindow", "onTouch : ");
+                return false;
+                // 这里如果返回true的话，touch事件将被拦截
+                // 拦截后 PopupWindow的onTouchEvent不被调用，这样点击外部区域无法dismiss
+            }
+        });
+
+        // 如果不设置PopupWindow的背景，无论是点击外部区域还是Back键都无法dismiss弹框
+        bookInfoPop.setBackgroundDrawable(new BitmapDrawable());
+        bookInfoPop.setAnimationStyle(R.style.popup_window_anim);
+        bookInfoPop.showAtLocation(detailsRecyclerView, Gravity.CENTER, 0, 0);
+
+    }
 }

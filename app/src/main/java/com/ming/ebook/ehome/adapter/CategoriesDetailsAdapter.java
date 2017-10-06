@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.ming.ebook.R;
 import com.ming.ebook.bean.CategoriesDetails;
-import com.ming.ebook.ehome.homeinterface.OnRecycleItemClickListener;
 import com.ming.ebook.utils.RegularUtils;
 
 import java.util.List;
@@ -25,7 +24,6 @@ import java.util.List;
 public class CategoriesDetailsAdapter extends RecyclerView.Adapter<CategoriesDetailsAdapter.ItemDetailsViewHolder> {
     private List<CategoriesDetails.DataBean.BooksBean> mDataList;
     private Context mContext;
-    private OnRecycleItemClickListener mOnRecycleItemClickListener;
 
     public CategoriesDetailsAdapter(List<CategoriesDetails.DataBean.BooksBean> dataBeanList, Context context) {
         this.mDataList = dataBeanList;
@@ -34,7 +32,7 @@ public class CategoriesDetailsAdapter extends RecyclerView.Adapter<CategoriesDet
 
     @Override
     public ItemDetailsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
+        View view = LayoutInflater.from(mContext)
                 .inflate(R.layout.item_categories_details, parent, false);
 
         return new ItemDetailsViewHolder(view);
@@ -77,17 +75,28 @@ public class CategoriesDetailsAdapter extends RecyclerView.Adapter<CategoriesDet
 
         ItemDetailsViewHolder(View itemView) {
             super(itemView);
-            book_cover = (ImageView) itemView.findViewById(R.id.item_book_cover);
-            book_title = (TextView) itemView.findViewById(R.id.item_book_title);
-            book_author = (TextView) itemView.findViewById(R.id.item_book_author);
-            book_shortIntro = (TextView) itemView.findViewById(R.id.item_book_shortIntro);
-            book_follower = (TextView) itemView.findViewById(R.id.item_book_follower);
+            book_cover = (ImageView) itemView.findViewById(R.id.book_cover);
+            book_title = (TextView) itemView.findViewById(R.id.book_title);
+            book_author = (TextView) itemView.findViewById(R.id.book_author);
+            book_shortIntro = (TextView) itemView.findViewById(R.id.book_shortIntro);
+            book_follower = (TextView) itemView.findViewById(R.id.book_follower);
             itemView.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
-            mOnRecycleItemClickListener.onItemClick(v, getAdapterPosition());
+            if (mOnItemClickListener!=null){
+                mOnItemClickListener.onItemClick(v,getAdapterPosition());
+            }
         }
+    }
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    private OnItemClickListener mOnItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.mOnItemClickListener = onItemClickListener;
     }
 }

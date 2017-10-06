@@ -1,4 +1,4 @@
-package decoration;
+package com.ming.ebook.decoration;
 
 import android.content.Context;
 import android.content.res.TypedArray;

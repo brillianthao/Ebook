@@ -13,6 +13,7 @@ import com.ming.ebook.R;
 import com.ming.ebook.base.BaseFragment;
 import com.ming.ebook.bean.BannerBean;
 import com.ming.ebook.bean.Categories;
+import com.ming.ebook.decoration.DividerGridItemDecoration;
 import com.ming.ebook.ehome.adapter.BannerAdapter;
 import com.ming.ebook.ehome.adapter.CategoriesFemaleAdapter;
 import com.ming.ebook.ehome.adapter.CategoriesMaleAdapter;
@@ -21,8 +22,6 @@ import com.ming.ebook.view.HorizontalListView;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import decoration.DividerGridItemDecoration;
 
 
 /**

@@ -1,4 +1,4 @@
-package decoration;
+package com.ming.ebook.decoration;
 
 /*
  * Copyright (C) 2014 The Android Open Source Project
