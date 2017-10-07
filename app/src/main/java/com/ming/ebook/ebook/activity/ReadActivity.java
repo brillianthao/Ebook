@@ -4,7 +4,15 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.ming.ebook.R;
@@ -14,20 +22,29 @@ import com.ming.ebook.bean.BookSource;
 import com.ming.ebook.bean.ChaptersDetail;
 import com.ming.ebook.constant.AppConstants;
 import com.ming.ebook.constant.EBookUri;
+import com.ming.ebook.decoration.DividerItemDecoration;
+import com.ming.ebook.ebook.adapter.CategoriesListAdapter;
 import com.ming.ebook.utils.Model;
 import com.ming.ebook.utils.PrintLog;
 import com.ming.ebook.utils.UrlEncodeUtil;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 
-public class ReadActivity extends BaseActivity {
-
+public class ReadActivity extends BaseActivity implements CategoriesListAdapter.OnItemClickListener {
+    private ProgressBar loadingBar;
+    private ScrollView scrollViewRead;
+    private TextView mTextView;
+    private RecyclerView catalogueRecyclerView;
+    private List<BookChapters.DataBean.ChaptersBean> categoriesList;
+    private CategoriesListAdapter categoriesListAdapter;
+    private int currentPosition = 0;
     //Handler
     private final Handler mHandler = new ReadActivity.ReadHandler(this);
 
@@ -79,7 +96,13 @@ public class ReadActivity extends BaseActivity {
             case AppConstants.BOOK_CHAPTERS_HANDLER:
                 List<BookChapters.DataBean.ChaptersBean> chaptersBeanList = (List<BookChapters.DataBean.ChaptersBean>) msg.obj;
                 if (chaptersBeanList != null && chaptersBeanList.size() > 0) {
-                    //3.获取章节详细内容
+                    //3.1 添加章节对象
+                    for (BookChapters.DataBean.ChaptersBean bean : chaptersBeanList) {
+                        categoriesList.add(bean);
+                    }
+                    categoriesListAdapter.notifyDataSetChanged();
+
+                    //3.2 获取章节详细内容
                     String link = chaptersBeanList.get(0).getLink();
                     String chaptersDetailUrl = EBookUri.BOOK_CHAPTERS_DETAIL + UrlEncodeUtil.encoderString(link);
                     getBookSourceDataByUrl(chaptersDetailUrl, AppConstants.TAG_BOOK_CHAPTERS_DETAIL);
@@ -90,8 +113,13 @@ public class ReadActivity extends BaseActivity {
             case AppConstants.BOOK_CHAPTERS_DETAIL_HANDLER:
                 //4.章节内容
                 ChaptersDetail.DataBean.ChapterBean chapterBean = (ChaptersDetail.DataBean.ChapterBean) msg.obj;
-                PrintLog.d("ReadActivity:"+chapterBean.getCpContent());
-
+                PrintLog.d("ReadActivity:" + chapterBean.getCpContent());
+                String content = chapterBean.getTitle() + "\n" + "\n" + chapterBean.getCpContent().trim();
+                mTextView.setText(content);
+                //显示内容
+                scrollViewRead.setVisibility(View.VISIBLE);
+                catalogueRecyclerView.setVisibility(View.GONE);
+                loadingBar.setVisibility(View.GONE);
                 break;
             default:
                 break;
@@ -101,19 +129,94 @@ public class ReadActivity extends BaseActivity {
 
     @Override
     protected int getContentViewId() {
-        immersiveStatusBar(R.color.blue);
+        immersiveStatusBar(R.color.transparent);
         return R.layout.activity_read;
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
+        //ui
+        loadingBar = (ProgressBar) findViewById(R.id.loading_bar);
+        scrollViewRead = (ScrollView) findViewById(R.id.scrollView_read);
+        mTextView = (TextView) findViewById(R.id.book_content);
+        catalogueRecyclerView = (RecyclerView) findViewById(R.id.catalogue_recycler_view);
+        catalogueRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+        catalogueRecyclerView.setLayoutManager(mLayoutManager);
+        catalogueRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        catalogueRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+
+        findViewById(R.id.catalogue_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCatalogueList();
+            }
+        });
+
+        findViewById(R.id.next_bt).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNextCatalogue();
+            }
+        });
+
+        //data
         String book_id = getIntent().getStringExtra("book_id");
-        PrintLog.d("ReadActivity book_id:"+book_id);
+        PrintLog.d("ReadActivity book_id:" + book_id);
         if (!TextUtils.isEmpty(book_id)) {
             //1.获取书籍源
             String bookSourceUrl = EBookUri.BOOK_SOURCE + book_id;
             getBookSourceDataByUrl(bookSourceUrl, AppConstants.TAG_BOOK_SOURCE_ID);
         }
+        categoriesList = new ArrayList<>();
+        categoriesListAdapter = new CategoriesListAdapter(categoriesList, this);
+        catalogueRecyclerView.setAdapter(categoriesListAdapter);
+        categoriesListAdapter.setOnItemClickListener(this);
+
+    }
+
+    /**
+     * 下一章
+     */
+    private void showNextCatalogue() {
+        if (currentPosition < (categoriesList.size() - 1)) {
+            //显示圈
+            scrollViewRead.setVisibility(View.GONE);
+            catalogueRecyclerView.setVisibility(View.GONE);
+            loadingBar.setVisibility(View.VISIBLE);
+
+            currentPosition++;
+
+            String link = categoriesList.get(currentPosition).getLink();
+            String chaptersDetailUrl = EBookUri.BOOK_CHAPTERS_DETAIL + UrlEncodeUtil.encoderString(link);
+            getBookSourceDataByUrl(chaptersDetailUrl, AppConstants.TAG_BOOK_CHAPTERS_DETAIL);
+        } else {
+            Toast.makeText(ReadActivity.this, "已经到末尾了......", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * 目录
+     */
+    private void showCatalogueList() {
+        if (catalogueRecyclerView.isShown()) {
+            catalogueRecyclerView.setVisibility(View.GONE);
+        } else {
+            catalogueRecyclerView.setVisibility(View.VISIBLE);
+        }
+
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        //显示圈
+        scrollViewRead.setVisibility(View.GONE);
+        catalogueRecyclerView.setVisibility(View.GONE);
+        loadingBar.setVisibility(View.VISIBLE);
+
+        String link = categoriesList.get(position).getLink();
+        String chaptersDetailUrl = EBookUri.BOOK_CHAPTERS_DETAIL + UrlEncodeUtil.encoderString(link);
+        getBookSourceDataByUrl(chaptersDetailUrl, AppConstants.TAG_BOOK_CHAPTERS_DETAIL);
     }
 
     /**
