@@ -1,10 +1,12 @@
 package com.ming.ebook.ehome;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,6 +16,7 @@ import com.ming.ebook.base.BaseFragment;
 import com.ming.ebook.bean.BannerBean;
 import com.ming.ebook.bean.Categories;
 import com.ming.ebook.decoration.DividerGridItemDecoration;
+import com.ming.ebook.ebook.activity.ReadActivity;
 import com.ming.ebook.ehome.adapter.BannerAdapter;
 import com.ming.ebook.ehome.adapter.CategoriesFemaleAdapter;
 import com.ming.ebook.ehome.adapter.CategoriesMaleAdapter;
@@ -31,7 +34,7 @@ import java.util.List;
  * Email:sunming@radacat.com
  */
 
-public class HomeFragment extends BaseFragment implements IeHomeV {
+public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.OnItemClickListener {
     //UI
     private HorizontalListView bannerListView;
     private RecyclerView categoriesMaleRecyclerView;
@@ -94,6 +97,7 @@ public class HomeFragment extends BaseFragment implements IeHomeV {
         mBannerBeanList = new ArrayList<>();
         mBannerAdapter = new BannerAdapter(mBannerBeanList, mActivity);
         bannerListView.setAdapter(mBannerAdapter);
+        bannerListView.setOnItemClickListener(this);
 
         mMaleBeanList = new ArrayList<>();
         mMaleCategorieAdapter = new CategoriesMaleAdapter(mMaleBeanList, mActivity);
@@ -178,4 +182,16 @@ public class HomeFragment extends BaseFragment implements IeHomeV {
     public void showCategoriesCountDataError() {
         Toast.makeText(mActivity, "showCategoriesCountDataError", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //上面横的listview点击事件
+        BannerBean.DataBean.RankingBean.BooksBean booksBean = mBannerBeanList.get(position);
+        //跳转
+        Intent intent = new Intent(mActivity, ReadActivity.class);
+        intent.putExtra("book_id", booksBean.get_id());
+        mActivity.startActivity(intent);
+    }
+
+
 }

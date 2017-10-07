@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -25,6 +27,7 @@ import com.ming.ebook.constant.EBookUri;
 import com.ming.ebook.decoration.DividerItemDecoration;
 import com.ming.ebook.ebook.adapter.CategoriesListAdapter;
 import com.ming.ebook.utils.Model;
+import com.ming.ebook.utils.MyLayoutAnimationHelper;
 import com.ming.ebook.utils.PrintLog;
 import com.ming.ebook.utils.UrlEncodeUtil;
 
@@ -203,8 +206,8 @@ public class ReadActivity extends BaseActivity implements CategoriesListAdapter.
             catalogueRecyclerView.setVisibility(View.GONE);
         } else {
             catalogueRecyclerView.setVisibility(View.VISIBLE);
+            playLayoutAnimation(MyLayoutAnimationHelper.getAnimationSetFromLeft(), true);
         }
-
     }
 
     @Override
@@ -217,6 +220,22 @@ public class ReadActivity extends BaseActivity implements CategoriesListAdapter.
         String link = categoriesList.get(position).getLink();
         String chaptersDetailUrl = EBookUri.BOOK_CHAPTERS_DETAIL + UrlEncodeUtil.encoderString(link);
         getBookSourceDataByUrl(chaptersDetailUrl, AppConstants.TAG_BOOK_CHAPTERS_DETAIL);
+    }
+
+    /**
+     * 播放RecyclerView动画
+     *
+     * @param animation
+     * @param isReverse
+     */
+    public void playLayoutAnimation(Animation animation, boolean isReverse) {
+        LayoutAnimationController controller = new LayoutAnimationController(animation);
+        controller.setDelay(0.1f);
+        controller.setOrder(isReverse ? LayoutAnimationController.ORDER_REVERSE : LayoutAnimationController.ORDER_NORMAL);
+
+        catalogueRecyclerView.setLayoutAnimation(controller);
+        catalogueRecyclerView.getAdapter().notifyDataSetChanged();
+        catalogueRecyclerView.scheduleLayoutAnimation();
     }
 
     /**
