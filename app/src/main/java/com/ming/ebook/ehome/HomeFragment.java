@@ -69,7 +69,7 @@ public class HomeFragment extends BaseFragment implements IeHomeV {
         //top
         LinearLayout topBar = (LinearLayout) view.findViewById(R.id.home_top);
         TextView title = (TextView) topBar.findViewById(R.id.top_title);
-        title.setText("Home");
+        title.setText("书城");
         topBar.findViewById(R.id.top_right_ll).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

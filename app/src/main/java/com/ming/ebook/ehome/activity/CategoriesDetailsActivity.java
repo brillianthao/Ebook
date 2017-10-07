@@ -30,6 +30,7 @@ import com.ming.ebook.bean.CategoriesDetails;
 import com.ming.ebook.constant.AppConstants;
 import com.ming.ebook.constant.EBookUri;
 import com.ming.ebook.decoration.DividerItemDecoration;
+import com.ming.ebook.ebook.activity.ReadActivity;
 import com.ming.ebook.ehome.adapter.CategoriesDetailsAdapter;
 import com.ming.ebook.system.ScreenUtils;
 import com.ming.ebook.utils.Model;
@@ -266,7 +267,7 @@ public class CategoriesDetailsActivity extends BaseActivity implements RadioGrou
         TextView book_follower = (TextView) popView.findViewById(R.id.pop_book_follower);
         Button pop_add = (Button) popView.findViewById(R.id.pop_book_add);
         Button pop_read = (Button) popView.findViewById(R.id.pop_book_read);
-        CategoriesDetails.DataBean.BooksBean booksBean = mDetailsList.get(position);
+        final CategoriesDetails.DataBean.BooksBean booksBean = mDetailsList.get(position);
         //加载图片
         Glide.with(this)
                 .load(RegularUtils.regularImageUrl(booksBean.getCover()))
@@ -280,15 +281,20 @@ public class CategoriesDetailsActivity extends BaseActivity implements RadioGrou
         pop_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //操作数据库
+                //1.操作数据库
+                // 2.加入书架
+
             }
         });
         pop_read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //操作数据库
-//                Intent intent = new Intent();
-//                startActivity(intent);
+                //1.操作数据库
+                bookInfoPop.dismiss();
+                //2.开始阅读
+                Intent intent = new Intent(CategoriesDetailsActivity.this, ReadActivity.class);
+                intent.putExtra("book_id", booksBean.get_id());
+                startActivity(intent);
             }
         });
         //2.window

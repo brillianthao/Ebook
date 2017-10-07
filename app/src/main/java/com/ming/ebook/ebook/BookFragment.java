@@ -16,7 +16,7 @@ import com.ming.ebook.base.BaseFragment;
  * Email:sunming@radacat.com
  */
 
-public class BookFragment extends BaseFragment {
+public class BookFragment extends BaseFragment implements IeBookV{
     public static BookFragment newInstance(String param1) {
         BookFragment fragment = new BookFragment();
         Bundle args = new Bundle();
@@ -36,7 +36,7 @@ public class BookFragment extends BaseFragment {
         LinearLayout topSearchLL = (LinearLayout) topBar.findViewById(R.id.top_search_ll);
         topSearchLL.setVisibility(View.INVISIBLE);
         TextView title = (TextView) topBar.findViewById(R.id.top_title);
-        title.setText("Book");
+        title.setText("书架");
     }
 
     @Override

@@ -32,8 +32,12 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
         <activity
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            android:name=".ehome.activity.CategoriesDetailsActivity">
+            android:name=".ehome.activity.CategoriesDetailsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        </activity>
+        <activity
+            android:name=".ebook.activity.ReadActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         </activity>
     </application>
 

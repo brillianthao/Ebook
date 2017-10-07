@@ -36,7 +36,7 @@ public class MineFragment extends BaseFragment {
         LinearLayout topSearchLL = (LinearLayout) topBar.findViewById(R.id.top_search_ll);
         topSearchLL.setVisibility(View.INVISIBLE);
         TextView title = (TextView) topBar.findViewById(R.id.top_title);
-        title.setText("Mine");
+        title.setText("我的");
     }
 
     @Override

@@ -13,4 +13,10 @@ public class AppConstants {
 
     public static final int DETAIL_DATA_HANDLER = 0;
 
+    public static final int BOOK_SOURCE_ID_HANDLER = 1;
+    public static final int BOOK_CHAPTERS_HANDLER = 2;
+    public static final int BOOK_CHAPTERS_DETAIL_HANDLER = 3;
+    public static final int TAG_BOOK_SOURCE_ID = 3;
+    public static final int TAG_BOOK_CHAPTERS = 4;
+    public static final int TAG_BOOK_CHAPTERS_DETAIL = 5;
 }
