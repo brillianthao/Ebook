@@ -19,8 +19,13 @@ import com.ming.ebook.dao.entity.BookBean;
 import com.ming.ebook.decoration.DividerGridItemDecoration;
 import com.ming.ebook.ebook.activity.ReadActivity;
 import com.ming.ebook.ebook.adapter.StaggeredGridAdapter;
+import com.ming.ebook.event.RefreshBookShelf;
 import com.ming.ebook.utils.MyLayoutAnimationHelper;
 import com.ming.ebook.view.StaggeredGridRecyclerView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +69,8 @@ public class BookFragment extends BaseFragment implements IeBookV, StaggeredGrid
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerGridItemDecoration(mActivity));
+        //注册EventBus
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -125,5 +132,22 @@ public class BookFragment extends BaseFragment implements IeBookV, StaggeredGrid
         Intent intent = new Intent(mActivity, ReadActivity.class);
         intent.putExtra("book_id", book.getBook_id());
         mActivity.startActivity(intent);
+    }
+
+    //EventBus-------------------------------------------------------------------------------------
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void receiveRefreshBooks(RefreshBookShelf refreshBookShelf) {
+        if (refreshBookShelf != null) {
+            bookList.add(refreshBookShelf.getRefreshBook());
+            mStaggeredGridAdapter.notifyDataSetChanged();
+        }
+    }
+    //-------------------------------------------------------------------------------------
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //解注册EventBus
+        EventBus.getDefault().unregister(this);
     }
 }

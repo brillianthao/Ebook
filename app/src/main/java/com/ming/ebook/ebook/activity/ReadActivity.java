@@ -1,13 +1,16 @@
 package com.ming.ebook.ebook.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LayoutAnimationController;
@@ -24,12 +27,18 @@ import com.ming.ebook.bean.BookSource;
 import com.ming.ebook.bean.ChaptersDetail;
 import com.ming.ebook.constant.AppConstants;
 import com.ming.ebook.constant.EBookUri;
+import com.ming.ebook.dao.BookBeanDao;
+import com.ming.ebook.dao.DbHelper;
+import com.ming.ebook.dao.entity.BookBean;
 import com.ming.ebook.decoration.DividerItemDecoration;
 import com.ming.ebook.ebook.adapter.CategoriesListAdapter;
+import com.ming.ebook.event.RefreshBookShelf;
 import com.ming.ebook.utils.Model;
 import com.ming.ebook.utils.MyLayoutAnimationHelper;
 import com.ming.ebook.utils.PrintLog;
 import com.ming.ebook.utils.UrlEncodeUtil;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -48,6 +57,9 @@ public class ReadActivity extends BaseActivity implements CategoriesListAdapter.
     private List<BookChapters.DataBean.ChaptersBean> categoriesList;
     private CategoriesListAdapter categoriesListAdapter;
     private int currentPosition = 0;
+    private String book_id;
+    private String book_name;
+    private String book_cover;
     //Handler
     private final Handler mHandler = new ReadActivity.ReadHandler(this);
 
@@ -115,6 +127,7 @@ public class ReadActivity extends BaseActivity implements CategoriesListAdapter.
 
             case AppConstants.BOOK_CHAPTERS_DETAIL_HANDLER:
                 //4.章节内容
+                scrollViewRead.fullScroll(ScrollView.FOCUS_UP);
                 ChaptersDetail.DataBean.ChapterBean chapterBean = (ChaptersDetail.DataBean.ChapterBean) msg.obj;
                 PrintLog.d("ReadActivity:" + chapterBean.getCpContent());
                 String content = chapterBean.getTitle() + "\n" + "\n" + chapterBean.getCpContent().trim();
@@ -164,8 +177,12 @@ public class ReadActivity extends BaseActivity implements CategoriesListAdapter.
         });
 
         //data
-        String book_id = getIntent().getStringExtra("book_id");
+
+        book_id = getIntent().getStringExtra("book_id");
+        book_name = getIntent().getStringExtra("book_name");
+        book_cover = getIntent().getStringExtra("book_cover");
         PrintLog.d("ReadActivity book_id:" + book_id);
+
         if (!TextUtils.isEmpty(book_id)) {
             //1.获取书籍源
             String bookSourceUrl = EBookUri.BOOK_SOURCE + book_id;
@@ -212,6 +229,7 @@ public class ReadActivity extends BaseActivity implements CategoriesListAdapter.
 
     @Override
     public void onItemClick(View view, int position) {
+        currentPosition = position;
         //显示圈
         scrollViewRead.setVisibility(View.GONE);
         catalogueRecyclerView.setVisibility(View.GONE);
@@ -300,6 +318,66 @@ public class ReadActivity extends BaseActivity implements CategoriesListAdapter.
                 });
             }
         });
+
+    }
+
+    /**
+     * 显示加入书架对话框
+     */
+    private void showJoinBookShelfDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("添加进书架")
+                .setMessage("是否将本书添加进书架?")
+                .setPositiveButton("加入", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        //添加操作
+                        BookBean gridBook = new BookBean();
+                        gridBook.setBook_id(book_id);
+                        gridBook.setBook_cover(book_cover);
+                        gridBook.setName(book_name);
+                        gridBook.setReaded_chapter(categoriesList.get(currentPosition).getTitle());
+                        DbHelper.getInstance().getmDaoSession().getBookBeanDao().insertOrReplace(gridBook);
+                        //更新书架
+                        RefreshBookShelf refreshBookShelf = new RefreshBookShelf();
+                        refreshBookShelf.setRefreshBook(gridBook);
+                        EventBus.getDefault().post(refreshBookShelf);
+                        Toast.makeText(ReadActivity.this, "已添加进书架", Toast.LENGTH_SHORT).show();
+
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+                .setNegativeButton("不了", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+                .create()
+                .show();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            List<BookBean> searchBookList = DbHelper.getInstance().getmDaoSession().getBookBeanDao().queryBuilder().where(BookBeanDao.Properties.Book_id.eq(book_id)).build().list();
+            if (searchBookList.size() > 0) {
+                finish();
+            } else {
+                showJoinBookShelfDialog();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
 
     }
 }

@@ -191,6 +191,8 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
         //跳转
         Intent intent = new Intent(mActivity, ReadActivity.class);
         intent.putExtra("book_id", booksBean.get_id());
+        intent.putExtra("book_name",booksBean.getTitle());
+        intent.putExtra("book_cover",booksBean.getCover());
         mActivity.startActivity(intent);
     }
 

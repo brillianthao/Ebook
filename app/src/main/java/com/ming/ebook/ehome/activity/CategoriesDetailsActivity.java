@@ -36,10 +36,13 @@ import com.ming.ebook.dao.entity.BookBean;
 import com.ming.ebook.decoration.DividerItemDecoration;
 import com.ming.ebook.ebook.activity.ReadActivity;
 import com.ming.ebook.ehome.adapter.CategoriesDetailsAdapter;
+import com.ming.ebook.event.RefreshBookShelf;
 import com.ming.ebook.system.ScreenUtils;
 import com.ming.ebook.utils.Model;
 import com.ming.ebook.utils.PrintLog;
 import com.ming.ebook.utils.RegularUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -296,7 +299,10 @@ public class CategoriesDetailsActivity extends BaseActivity implements RadioGrou
                     gridBook.setName(booksBean.getTitle());
                     gridBook.setReaded_chapter(AppConstants.NO_READED_CHAPTER);
                     DbHelper.getInstance().getmDaoSession().getBookBeanDao().insert(gridBook);
-
+                    //更新书架
+                    RefreshBookShelf refreshBookShelf = new RefreshBookShelf();
+                    refreshBookShelf.setRefreshBook(gridBook);
+                    EventBus.getDefault().post(refreshBookShelf);
                     Toast.makeText(CategoriesDetailsActivity.this, "已添加进书架", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -308,6 +314,8 @@ public class CategoriesDetailsActivity extends BaseActivity implements RadioGrou
                 //2.跳转到开始阅读界面
                 Intent intent = new Intent(CategoriesDetailsActivity.this, ReadActivity.class);
                 intent.putExtra("book_id", booksBean.get_id());
+                intent.putExtra("book_name", booksBean.getTitle());
+                intent.putExtra("book_cover", booksBean.getCover());
                 startActivity(intent);
             }
         });
