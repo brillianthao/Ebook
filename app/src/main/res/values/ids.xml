@@ -4,4 +4,6 @@
     <item name="image_tag" type="id"/>
     <!--分类详情-->
     <item name="image_detail_tag" type="id"/>
+    <!--书架-->
+    <item name="book_cover_tag" type="id"/>
 </resources>

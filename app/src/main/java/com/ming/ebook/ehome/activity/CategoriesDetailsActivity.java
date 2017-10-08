@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
@@ -29,6 +30,9 @@ import com.ming.ebook.bean.Categories;
 import com.ming.ebook.bean.CategoriesDetails;
 import com.ming.ebook.constant.AppConstants;
 import com.ming.ebook.constant.EBookUri;
+import com.ming.ebook.dao.BookBeanDao;
+import com.ming.ebook.dao.DbHelper;
+import com.ming.ebook.dao.entity.BookBean;
 import com.ming.ebook.decoration.DividerItemDecoration;
 import com.ming.ebook.ebook.activity.ReadActivity;
 import com.ming.ebook.ehome.adapter.CategoriesDetailsAdapter;
@@ -281,17 +285,27 @@ public class CategoriesDetailsActivity extends BaseActivity implements RadioGrou
         pop_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //1.操作数据库
-                // 2.加入书架
+                //1.加入书架(先查询有没有)
+                List<BookBean> searchBookList = DbHelper.getInstance().getmDaoSession().getBookBeanDao().queryBuilder().where(BookBeanDao.Properties.Book_id.eq(booksBean.get_id())).build().list();
+                if (searchBookList.size() > 0) {
+                    Toast.makeText(CategoriesDetailsActivity.this, "书架中已存在", Toast.LENGTH_SHORT).show();
+                } else {
+                    BookBean gridBook = new BookBean();
+                    gridBook.setBook_id(booksBean.get_id());
+                    gridBook.setBook_cover(booksBean.getCover());
+                    gridBook.setName(booksBean.getTitle());
+                    gridBook.setReaded_chapter(AppConstants.NO_READED_CHAPTER);
+                    DbHelper.getInstance().getmDaoSession().getBookBeanDao().insert(gridBook);
 
+                    Toast.makeText(CategoriesDetailsActivity.this, "已添加进书架", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         pop_read.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //1.操作数据库
                 bookInfoPop.dismiss();
-                //2.开始阅读
+                //2.跳转到开始阅读界面
                 Intent intent = new Intent(CategoriesDetailsActivity.this, ReadActivity.class);
                 intent.putExtra("book_id", booksBean.get_id());
                 startActivity(intent);

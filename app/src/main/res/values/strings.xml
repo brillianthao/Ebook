@@ -5,4 +5,5 @@
     <string name="fragment_mine">我的</string>
     <string name="item_counts">%1$d 本</string>
     <string name="item_followers">%1$d 人气</string>
+    <string name="readed_chapter">已读到:\n %1$s</string>
 </resources>

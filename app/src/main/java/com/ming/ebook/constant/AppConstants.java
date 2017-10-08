@@ -10,6 +10,7 @@ package com.ming.ebook.constant;
 public class AppConstants {
 
     public static final String FIRST_CACHE = "firstCache";
+    public static final String NO_READED_CHAPTER = "暂无信息";
 
     public static final int DETAIL_DATA_HANDLER = 0;
 

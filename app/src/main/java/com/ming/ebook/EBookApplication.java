@@ -14,9 +14,12 @@ import com.ming.ebook.utils.Model;
  */
 
 public class EBookApplication extends Application {
+    private static EBookApplication instance;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        instance = this;
     }
 
     @Override
@@ -26,6 +29,10 @@ public class EBookApplication extends Application {
         MultiDex.install(this);
         //初始化数据模型层类
         Model.getInstance().init(this);
+    }
+
+    public static EBookApplication getInstance() {
+        return instance;
     }
 }
 //1.凡是和UI相关的，都不建议使用Application的Context.

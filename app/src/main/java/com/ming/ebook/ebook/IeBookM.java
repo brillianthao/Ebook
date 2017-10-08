@@ -8,4 +8,8 @@ package com.ming.ebook.ebook;
  */
 
 public interface IeBookM {
+    /**
+     * 从数据库取出书架信息
+     */
+    void getBooksFromDao();
 }

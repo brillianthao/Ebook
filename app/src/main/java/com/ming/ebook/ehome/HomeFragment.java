@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ming.ebook.EBookApplication;
 import com.ming.ebook.R;
 import com.ming.ebook.base.BaseFragment;
 import com.ming.ebook.bean.BannerBean;
@@ -146,7 +147,7 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
 
     @Override
     public void showBannerDataToViewError() {
-        Toast.makeText(mActivity, "showBannerDataToViewError", Toast.LENGTH_SHORT).show();
+        Toast.makeText(EBookApplication.getInstance().getApplicationContext(), "showBannerDataToViewError", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -180,7 +181,7 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
 
     @Override
     public void showCategoriesCountDataError() {
-        Toast.makeText(mActivity, "showCategoriesCountDataError", Toast.LENGTH_SHORT).show();
+        Toast.makeText(EBookApplication.getInstance().getApplicationContext(), "showCategoriesCountDataError", Toast.LENGTH_SHORT).show();
     }
 
     @Override

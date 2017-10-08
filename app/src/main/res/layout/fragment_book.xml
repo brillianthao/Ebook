@@ -9,12 +9,10 @@
         android:id="@+id/book_top"
         layout="@layout/app_topbar"/>
 
-    <TextView
-        android:id="@+id/tv_book"
+    <com.ming.ebook.view.StaggeredGridRecyclerView
+        android:background="@drawable/theme_leather_bg"
+        android:id="@+id/staggered_grid_book"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="Book"
-        android:textColor="@color/black"
-        android:textSize="20sp"/>
+        />
 </LinearLayout>
