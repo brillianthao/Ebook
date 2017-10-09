@@ -69,12 +69,12 @@ public class BookFragment extends BaseFragment implements IeBookV, StaggeredGrid
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new DividerGridItemDecoration(mActivity));
-        //注册EventBus
-        EventBus.getDefault().register(this);
     }
 
     @Override
     protected void loadData() {
+        //注册EventBus
+        EventBus.getDefault().register(this);
         //data
         bookList = new ArrayList<>();
         mStaggeredGridAdapter = new StaggeredGridAdapter(bookList, mActivity);

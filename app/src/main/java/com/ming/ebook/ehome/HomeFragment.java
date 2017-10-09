@@ -94,6 +94,11 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
         categoriesFemaleRecyclerView.setHasFixedSize(true);
         categoriesFemaleRecyclerView.setItemAnimator(new DefaultItemAnimator());
         categoriesFemaleRecyclerView.addItemDecoration(new DividerGridItemDecoration(mActivity));
+    }
+
+    @Override
+    protected void loadData() {
+        PrintLog.d("banner loadData()");
         //data
         mBannerBeanList = new ArrayList<>();
         mBannerAdapter = new BannerAdapter(mBannerBeanList, mActivity);
@@ -111,11 +116,6 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
         //类
         mHomeP = new HomeP(this);
         PrintLog.d("banner initView");
-    }
-
-    @Override
-    protected void loadData() {
-        PrintLog.d("banner loadData()");
         //1.获取banner数据
         mHomeP.getBannerData();
         //2获取分类数据
