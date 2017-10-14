@@ -103,7 +103,13 @@ public class BookFragment extends BaseFragment implements IeBookV, StaggeredGrid
 
     @Override
     public void showBooksToViewError() {
-        Toast.makeText(EBookApplication.getInstance().getApplicationContext(), "showBooksToViewError", Toast.LENGTH_SHORT).show();
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(EBookApplication.getInstance().getApplicationContext(), "showBooksToViewError", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
 //----------------------------------------------------------------------------------------------------------------------------------------

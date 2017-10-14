@@ -4,9 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +23,6 @@ import com.ming.ebook.ehome.adapter.BannerAdapter;
 import com.ming.ebook.ehome.adapter.CategoriesFemaleAdapter;
 import com.ming.ebook.ehome.adapter.CategoriesMaleAdapter;
 import com.ming.ebook.utils.PrintLog;
-import com.ming.ebook.view.HorizontalListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,9 +35,9 @@ import java.util.List;
  * Email:sunming@radacat.com
  */
 
-public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.OnItemClickListener {
+public class HomeFragment extends BaseFragment implements IeHomeV,BannerAdapter.OnItemClickListener {
     //UI
-    private HorizontalListView bannerListView;
+    private RecyclerView bannerRecyclerView;
     private RecyclerView categoriesMaleRecyclerView;
     private RecyclerView categoriesFemaleRecyclerView;
     //data
@@ -82,7 +82,15 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
         });
 
         //UI
-        bannerListView = (HorizontalListView) view.findViewById(R.id.horizontal_list_view);
+        bannerRecyclerView = (RecyclerView) view.findViewById(R.id.banner_recycler_view);
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(mActivity);
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        bannerRecyclerView.setLayoutManager(mLayoutManager);
+        bannerRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        // 将SnapHelper attach 到RecyclrView
+        LinearSnapHelper snapHelper = new LinearSnapHelper();
+        snapHelper.attachToRecyclerView(bannerRecyclerView);
+
         categoriesMaleRecyclerView = (RecyclerView) view.findViewById(R.id.male_recycler_view);
         categoriesMaleRecyclerView.setLayoutManager(new GridLayoutManager(mActivity, 3));
         categoriesMaleRecyclerView.setHasFixedSize(true);
@@ -102,8 +110,8 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
         //data
         mBannerBeanList = new ArrayList<>();
         mBannerAdapter = new BannerAdapter(mBannerBeanList, mActivity);
-        bannerListView.setAdapter(mBannerAdapter);
-        bannerListView.setOnItemClickListener(this);
+        bannerRecyclerView.setAdapter(mBannerAdapter);
+        mBannerAdapter.setOnItemClickListener(this);
 
         mMaleBeanList = new ArrayList<>();
         mMaleCategorieAdapter = new CategoriesMaleAdapter(mMaleBeanList, mActivity);
@@ -147,7 +155,13 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
 
     @Override
     public void showBannerDataToViewError() {
-        Toast.makeText(EBookApplication.getInstance().getApplicationContext(), "showBannerDataToViewError", Toast.LENGTH_SHORT).show();
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(EBookApplication.getInstance().getApplicationContext(), "showBannerDataToViewError", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
@@ -181,12 +195,17 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
 
     @Override
     public void showCategoriesCountDataError() {
-        Toast.makeText(EBookApplication.getInstance().getApplicationContext(), "showCategoriesCountDataError", Toast.LENGTH_SHORT).show();
+        mActivity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(EBookApplication.getInstance().getApplicationContext(), "showCategoriesCountDataError", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //上面横的listview点击事件
+    public void onItemClick(View view, int position) {
         BannerBean.DataBean.RankingBean.BooksBean booksBean = mBannerBeanList.get(position);
         //跳转
         Intent intent = new Intent(mActivity, ReadActivity.class);
@@ -195,6 +214,4 @@ public class HomeFragment extends BaseFragment implements IeHomeV, AdapterView.O
         intent.putExtra("book_cover",booksBean.getCover());
         mActivity.startActivity(intent);
     }
-
-
 }
